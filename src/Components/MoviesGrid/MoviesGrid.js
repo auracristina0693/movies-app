@@ -14,3 +14,5 @@ export const MoviesGrid = () => {
     </div>
   );
 };
+
+export default MoviesGrid;

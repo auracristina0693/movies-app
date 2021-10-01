@@ -1,17 +1,28 @@
 import React from "react";
 import styles from "./App.module.css";
-import { MoviesGrid } from "./Components/MoviesGrid/MoviesGrid";
+import { MovieDetails } from "./Components/MovieDetails/MovieDetails";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { LandingPage } from "./Components/LandingPage/LandingPage";
 
 function App() {
   return (
-    <div className="App">
+    <Router className="App">
       <header>
-        <h1 className={styles.title}>Movies App</h1>
+        <Link to="/">
+          <h1 className={styles.title}>Movies App</h1>
+        </Link>
       </header>
-      <div>
-        <MoviesGrid />
-      </div>
-    </div>
+      <main>
+        <Switch>
+          <Route exact path="/movies/:movieId">
+            <MovieDetails />
+          </Route>
+          <Route path="/">
+            <LandingPage />
+          </Route>
+        </Switch>
+      </main>
+    </Router>
   );
 }
 
