@@ -3,36 +3,39 @@ import { get } from "../../utils/linkappi";
 import { MovieCard } from "../MovieCard/MovieCard";
 import styles from "./MoviesGrid.module.css";
 import { Spinner } from "../Spinner/Spinner";
-import { useQuery } from "../../Hooks/useQuery";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-export const MoviesGrid = () => {
+export const MoviesGrid = ({ search }) => {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const query = useQuery();
-  const search = query.get("search");
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
     const searchUrl = search
-      ? "/search/movie?query=" + search
-      : "/discover/movie";
+      ? "/search/movie?query=" + search + "&page=" + page
+      : "/discover/movie?page=" + page;
     get(searchUrl).then((data) => {
-      setMovies(data.results);
+      setMovies((prevMovies) => prevMovies.concat(data.results));
+      setHasMore(data.page < data.total_pages);
       setIsLoading(false);
     });
-  }, [search]);
+  }, [search, page]);
 
-  if (isLoading) {
-    return <Spinner />;
-  }
   return (
-    <ul className={styles.moviesGrid}>
-      {movies?.map((movie) => (
-        <MovieCard key={movie.id} movie={movie} />
-      ))}
-    </ul>
+    <InfiniteScroll
+      dataLength={movies.length}
+      hasMore={hasMore}
+      next={() => setPage((prevPage) => prevPage + 1)}
+      loader={<Spinner />}
+    >
+      <ul className={styles.moviesGrid}>
+        {movies.map((movie) => (
+          <MovieCard key={movie.id} movie={movie} />
+        ))}
+      </ul>
+    </InfiniteScroll>
   );
 };
-
 export default MoviesGrid;

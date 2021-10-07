@@ -9,7 +9,7 @@ function App() {
     <Router className="App">
       <header>
         <Link to="/">
-          <h1 className={styles.title}>Movies App</h1>
+          <h1 className={styles.title}>Movies</h1>
         </Link>
       </header>
       <main>
