@@ -20,14 +20,15 @@ export const Search = () => {
           className={styles.searchInput}
           type="rext"
           value={search}
+          placeholder="Title"
+          aria-label="Search Movies"
           onChange={(e) => {
             const value = e.target.value;
             history.push("/?search=" + value);
           }}
         />
-        <button className={styles.searchButton} type="submit">
-          <FaSearch size={20} />
-        </button>
+
+        <FaSearch className={styles.searchButton} size={20} color="black" />
       </div>
     </form>
   );
